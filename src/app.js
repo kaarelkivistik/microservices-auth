@@ -50,7 +50,7 @@ api.post("/", (req, res) => {
 				res.send({token});
 			});
 		} else {
-			res.status(403).end();
+			res.status(401).end();
 		}
 	});
 });
@@ -64,13 +64,13 @@ api.get("/", (req, res) => {
 	
 	redisClient.get(name, (error, reply) => {
 		if(error) {
-			req.status(500).end(); return;
+			res.status(500).end(); return;
 		}
 		
 		if(reply === token) {
 			res.end();
 		} else {
-			res.status(403).end();
+			res.status(401).end();
 		};
 	})
 });
