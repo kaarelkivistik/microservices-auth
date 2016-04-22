@@ -42,7 +42,7 @@ api.post("/", (req, res) => {
 		if(password === actualPassword) {
 			const token = Math.random().toString(36).slice(2);
 			
-			redisClient.set(name, token, (error, reply) => {
+			redisClient.set(token, name, (error, reply) => {
 				if(error) {
 					res.status(500).end(); return;
 				}
@@ -56,18 +56,19 @@ api.post("/", (req, res) => {
 });
 
 api.get("/", (req, res) => {
-	const { name, token } = req.query;
+	const { token } = req.query;
 	
-	if(!name || !token) {
+	if(!token) {
 		res.status(400).end(); return;
 	}
 	
-	redisClient.get(name, (error, reply) => {
+	redisClient.get(token, (error, reply) => {
 		if(error) {
 			res.status(500).end(); return;
 		}
 		
-		if(reply === token) {
+		if(reply) {
+			res.set("X-Authenticated-User", reply)
 			res.end();
 		} else {
 			res.status(401).end();
