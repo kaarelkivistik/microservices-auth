@@ -56,7 +56,12 @@ api.post("/", (req, res) => {
 });
 
 api.get("/", (req, res) => {
-	const { token } = req.query;
+	const authHeader = req.get("Authorization") || "";
+	
+	const [scheme, headerToken] = authHeader.split(" ");	
+	const { token: queryToken } = req.query;
+	
+	const token = queryToken || headerToken;
 	
 	if(!token) {
 		res.status(400).end(); return;
@@ -69,7 +74,11 @@ api.get("/", (req, res) => {
 		
 		if(reply) {
 			res.set("X-Authenticated-User", reply)
-			res.end();
+			
+			if(headerToken)
+				res.end();
+			else
+				res.send({name: reply});
 		} else {
 			res.status(401).end();
 		};
