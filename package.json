@@ -1,6 +1,6 @@
 {
   "name": "users",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Messages REST microservice",
   "scripts": {
     "build": "babel --out-dir build src",

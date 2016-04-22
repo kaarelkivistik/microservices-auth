@@ -59,7 +59,7 @@ api.get("/", (req, res) => {
 	const { name, token } = req.query;
 	
 	if(!name || !token) {
-		req.status(400).end(); return;
+		res.status(400).end(); return;
 	}
 	
 	redisClient.get(name, (error, reply) => {
